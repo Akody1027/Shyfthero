@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShyftHero | Dispatch & Manager Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0b0d;
+      --bg-surface: #111317;
+      --bg-elevated: #181b22;
+      --bg-subtle: #222631;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-accent: rgba(255, 107, 0, 0.28);
+      
+      --accent: #ff6b00;
+      --accent-deep: #cc4e00;
+      --accent-glow: rgba(255, 107, 0, 0.16);
+      --accent-hover: #ff7f24;
+
+      --text-main: #f5f6f8;
+      --text-muted: #8b92a5;
+      --text-dim: #555c6d;
+
+      --status-unfilled: #ff334b;
+      --status-unfilled-bg: rgba(255, 51, 75, 0.1);
+      --status-filled: #00d26a;
+      --status-filled-bg: rgba(0, 210, 106, 0.1);
+      --status-live: #ff9900;
+
+      --sidebar-width: 260px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* Layout Shell */
+    aside {
+      width: var(--sidebar-width);
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand-section {
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .brand-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .brand-title span {
+      color: var(--accent);
+    }
+
+    .nav-group {
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 0 12px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .nav-item:hover {
+      color: var(--text-main);
+      background: var(--bg-elevated);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(255, 107, 0, 0.12) 0%, rgba(255, 107, 0, 0.02) 100%);
+      border-color: var(--border-accent);
+    }
+
+    .nav-item.active svg {
+      stroke: var(--accent);
+    }
+
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    .user-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    header {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(10, 11, 13, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .header-headline h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-headline p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-panic {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transition: var(--transition);
+    }
+
+    .btn-panic:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 100%);
+      box-shadow: 0 6px 24px rgba(255, 107, 0, 0.35);
+    }
+
+    .btn-panic svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2.5;
+    }
+
+    .content-area {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Metric Grid */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background: transparent;
+      transition: var(--transition);
+    }
+
+    .metric-card:hover::before {
+      background: var(--accent);
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .metric-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 12px 0 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-footer {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .metric-footer strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Section Header */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    /* Table Component */
+    .board-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-unfilled {
+      background: var(--status-unfilled-bg);
+      color: var(--status-unfilled);
+      border: 1px solid rgba(255, 51, 75, 0.2);
+    }
+
+    .badge-filled {
+      background: var(--status-filled-bg);
+      color: var(--status-filled);
+      border: 1px solid rgba(0, 210, 106, 0.2);
+    }
+
+    .badge-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .worker-preview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .worker-avatar-sm {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-icon:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Slide-Over Drawer */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      visibility: hidden;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .drawer-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      z-index: 101;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.active {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-header h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .drawer-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 6px;
+    }
+
+    .drawer-close:hover {
+      color: #fff;
+    }
+
+    .drawer-body {
+      padding: 32px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .pill-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .pill-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pill-btn:hover {
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .pill-btn.active {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .input-addon {
+      position: relative;
+      flex: 1;
+    }
+
+    .input-addon span {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .input-addon input {
+      padding-left: 28px;
+    }
+
+    .blast-option {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .blast-option.selected {
+      border-color: var(--accent);
+      background: rgba(255, 107, 0, 0.04);
+    }
+
+    .blast-option input[type="radio"] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+
+    .blast-content h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .blast-content p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .drawer-footer {
+      padding: 24px 32px;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+    }
+
+    .btn-submit-broadcast {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--accent-glow);
+      transition: var(--transition);
+    }
+
+    .btn-submit-broadcast:hover {
+      background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 100%);
+    }
+
+    /* Quick Pool View */
+    .pool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .worker-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .worker-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .worker-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .worker-photo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .worker-detail-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .worker-tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .worker-rating {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent);
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--accent-glow);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 200;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .toast.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 900px) {
+      aside {
+        display: none;
+      }
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+      header {
+        padding: 0 20px;
+      }
+      .content-area {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <div class="brand-section">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+      </div>
+      <div class="brand-title">Shyft<span>Hero</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Management</div>
+      <a class="nav-item active">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Live Dispatch
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Standby Pool
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Shift Logs
+      </a>
+
+      <div class="nav-label" style="margin-top: 24px;">Configuration</div>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verification Rules
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Site Profile
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="user-avatar">KD</div>
+        <div class="user-meta">
+          <div class="user-name">Central Dispatch</div>
+          <div class="user-role">Council Bluffs Hub</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main>
+    <header>
+      <div class="header-headline">
+        <h1>Command Center</h1>
+        <p>Monitor live shifts and broadcast immediate fill requests</p>
+      </div>
+
+      <button class="btn-panic" id="openDrawerBtn">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Broadcast Emergency Shift
+      </button>
+    </header>
+
+    <div class="content-area">
+      <!-- Metric Board -->
+      <section class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Standby Pool Depth</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="metric-value" id="metricPoolCount">38</div>
+          <div class="metric-footer"><strong>100%</strong> active within your 15-mile radius</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Open Urgent Shifts</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="metric-value" style="color: var(--status-unfilled);" id="metricUnfilledCount">1</div>
+          <div class="metric-footer">Broadcasting via high-priority push</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Avg Response Latency</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="metric-value">4m 12s</div>
+          <div class="metric-footer">Time from broadcast to shift claim</div>
+        </div>
+      </section>
+
+      <!-- Live Shift Board -->
+      <section>
+        <div class="section-head">
+          <h2>Active Shift Requests</h2>
+        </div>
+
+        <div class="board-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Role / Task</th>
+                <th>Window</th>
+                <th>Offered Rate</th>
+                <th>Assigned Hero</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="shiftsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Standby Roster Roster Sample -->
+      <section>
+        <div class="section-head">
+          <h2>Verified Roster (Standby Top-Tier)</h2>
+        </div>
+
+        <div class="pool-grid">
+          <div class="worker-card">
+            <div class="worker-info">
+              <div class="worker-photo">JD</div>
+              <div>
+                <div class="worker-detail-name">Jake Davis</div>
+                <div class="worker-tag">Box Truck, Forklift</div>
+              </div>
+            </div>
+            <div class="worker-rating">★ 4.95</div>
+          </div>
+
+          <div class="worker-card">
+            <div class="worker-info">
+              <div class="worker-photo">MS</div>
+              <div>
+                <div class="worker-detail-name">Marcus Smith</div>
+                <div class="worker-tag">Pallet Jack, Heavy Lift</div>
+              </div>
+            </div>
+            <div class="worker-rating">★ 5.00</div>
+          </div>
+
+          <div class="worker-card">
+            <div class="worker-info">
+              <div class="worker-photo">TL</div>
+              <div>
+                <div class="worker-detail-name">Trevor Lane</div>
+                <div class="worker-tag">Route Van, Flatbed</div>
+              </div>
+            </div>
+            <div class="worker-rating">★ 4.88</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Slide-Over Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <div class="drawer" id="shiftDrawer">
+    <div class="drawer-header">
+      <h3>Broadcast Urgent Shift</h3>
+      <button class="drawer-close" id="closeDrawerBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <form id="broadcastForm" class="drawer-body">
+      <div class="field-group">
+        <label class="field-label">Select Primary Capability</label>
+        <div class="pill-selector">
+          <div class="pill-btn active" data-role="Delivery Driver">Driver</div>
+          <div class="pill-btn" data-role="Warehouse Sort">Warehouse</div>
+          <div class="pill-btn" data-role="Heavy Lift">Mover</div>
+        </div>
+        <input type="hidden" id="selectedRole" value="Delivery Driver">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Shift Window</label>
+        <div class="input-group">
+          <input type="time" class="input-field" id="shiftStart" value="06:00" required>
+          <input type="time" class="input-field" id="shiftEnd" value="14:30" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Hourly Offering</label>
+        <div class="input-addon">
+          <span>$</span>
+          <input type="number" class="input-field" id="shiftRate" value="28" min="15" step="1" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Specific Instructions / Route Info</label>
+        <textarea class="input-field" id="shiftNotes" rows="3" placeholder="e.g. Bring steel-toe boots; checking in at Bay 4 dock dispatch."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Broadcast Target</label>
+        
+        <label class="blast-option selected">
+          <input type="radio" name="blastRadius" value="tier1" checked>
+          <div class="blast-content">
+            <h4>Tier 1 Heroes Only (Fast Claim)</h4>
+            <p>Direct alert to your 12 highest-rated repeat standby workers.</p>
+          </div>
+        </label>
+
+        <label class="blast-option" style="margin-top: 8px;">
+          <input type="radio" name="blastRadius" value="all">
+          <div class="blast-content">
+            <h4>Complete Pool (Emergency Radius)</h4>
+            <p>Simultaneous push to all 38 verified workers in your local pool.</p>
+          </div>
+        </label>
+      </div>
+    </form>
+
+    <div class="drawer-footer">
+      <button type="submit" form="broadcastForm" class="btn-submit-broadcast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Transmit Shift to Pool
+      </button>
+    </div>
+  </div>
+
+  <!-- Real-time Feedback Element -->
+  <div class="toast" id="notificationToast">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMessage">Shift successfully broadcasted to standby roster.</span>
+  </div>
+
+  <script>
+    // State Model
+    const shiftState = [
+      {
+        id: "SHYFT-8021",
+        role: "Emergency Route Driver",
+        time: "Today • 05:30 AM - 01:30 PM",
+        rate: "$32.00/hr",
+        status: "unfilled",
+        worker: null
+      },
+      {
+        id: "SHYFT-8020",
+        role: "Dock Loader & Pallet Sort",
+        time: "Today • 07:00 AM - 03:30 PM",
+        rate: "$24.50/hr",
+        status: "filled",
+        worker: { name: "Marcus Smith", initials: "MS" }
+      },
+      {
+        id: "SHYFT-8018",
+        role: "Expedited Parcel Sprinter",
+        time: "Yesterday • 02:00 PM - 08:00 PM",
+        rate: "$28.00/hr",
+        status: "filled",
+        worker: { name: "Jake Davis", initials: "JD" }
+      }
+    ];
+
+    // UI References
+    const shiftsTableBody = document.getElementById('shiftsTableBody');
+    const openDrawerBtn = document.getElementById('openDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const shiftDrawer = document.getElementById('shiftDrawer');
+    const broadcastForm = document.getElementById('broadcastForm');
+    const pillButtons = document.querySelectorAll('.pill-btn');
+    const selectedRoleInput = document.getElementById('selectedRole');
+    const notificationToast = document.getElementById('notificationToast');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Render Table
+    function renderTable() {
+      shiftsTableBody.innerHTML = '';
+      let unfilledCount = 0;
+
+      shiftState.forEach(shift => {
+        if (shift.status === 'unfilled') unfilledCount++;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            ${shift.status === 'unfilled' 
+              ? `<span class="badge badge-unfilled"><span class="badge-pulse"></span>Broadcasting</span>` 
+              : `<span class="badge badge-filled">Claimed</span>`}
+          </td>
+          <td>
+            <div style="font-weight: 700; color: #fff;">${shift.role}</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">${shift.id}</div>
+          </td>
+          <td>${shift.time}</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">${shift.rate}</td>
+          <td>
+            ${shift.worker 
+              ? `<div class="worker-preview">
+                   <div class="worker-avatar-sm">${shift.worker.initials}</div>
+                   <span style="font-weight: 600;">${shift.worker.name}</span>
+                 </div>` 
+              : `<span style="color: var(--text-dim); font-style: italic;">Awaiting claim...</span>`}
+          </td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-icon" title="View Shift Log" onclick="alert('Viewing parameters for ${shift.id}')">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              ${shift.status === 'unfilled' ? `
+                <button class="btn-icon" style="color: var(--status-unfilled);" title="Cancel Broadcast" onclick="cancelShift('${shift.id}')">
+                  <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        `;
+        shiftsTableBody.appendChild(row);
+      });
+
+      document.getElementById('metricUnfilledCount').textContent = unfilledCount;
+    }
+
+    // Drawer Mechanics
+    function openDrawer() {
+      drawerOverlay.classList.add('active');
+      shiftDrawer.classList.add('active');
+    }
+
+    function closeDrawer() {
+      drawerOverlay.classList.remove('active');
+      shiftDrawer.classList.remove('active');
+    }
+
+    openDrawerBtn.addEventListener('click', openDrawer);
+    closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+
+    // Pill Selector Action
+    pillButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pillButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRoleInput.value = btn.dataset.role;
+      });
+    });
+
+    // Blast Type Radio Styling State
+    const blastOptions = document.querySelectorAll('.blast-option');
+    blastOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        blastOptions.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+
+    // Toast Trigger
+    function triggerToast(text) {
+      toastMessage.textContent = text;
+      notificationToast.classList.add('visible');
+      setTimeout(() => {
+        notificationToast.classList.remove('visible');
+      }, 4000);
+    }
+
+    // Cancel Shift Action
+    window.cancelShift = function(id) {
+      const idx = shiftState.findIndex(s => s.id === id);
+      if (idx !== -1) {
+        shiftState.splice(idx, 1);
+        renderTable();
+        triggerToast(`Broadcast ${id} terminated.`);
+      }
+    };
+
+    // Form Submission & Transmission
+    broadcastForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const newId = `SHYFT-${Math.floor(1000 + Math.random() * 9000)}`;
+      const role = selectedRoleInput.value;
+      const start = document.getElementById('shiftStart').value;
+      const end = document.getElementById('shiftEnd').value;
+      const rate = `$${parseFloat(document.getElementById('shiftRate').value).toFixed(2)}/hr`;
+
+      // Prepend shift
+      shiftState.unshift({
+        id: newId,
+        role: role,
+        time: `Today • ${start} - ${end}`,
+        rate: rate,
+        status: "unfilled",
+        worker: null
+      });
+
+      renderTable();
+      closeDrawer();
+      triggerToast(`Alert dispatched to 38 Heroes via real-time channel.`);
+
+      // Simulate a standby worker claiming the shift within 5 seconds
+      setTimeout(() => {
+        const target = shiftState.find(s => s.id === newId);
+        if (target && target.status === 'unfilled') {
+          target.status = 'filled';
+          target.worker = { name: "Trevor Lane", initials: "TL" };
+          renderTable();
+          triggerToast(`Shift ${newId} claimed by Trevor Lane!`);
+        }
+      }, 4500);
+    });
+
+    // Initial Invocation
+    renderTable();
+  </script>
+</body>
+</html>
