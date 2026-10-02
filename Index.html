@@ -1,908 +1,1503 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ShyftHero | Dispatch Console</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-primary: #0a0b0d;
-      --bg-surface: #111317;
-      --bg-elevated: #181b22;
-      --bg-overlay: rgba(10, 11, 13, 0.85);
-      
-      --accent: #ff6b00;
-      --accent-deep: #cc4e00;
-      --accent-glow: rgba(255, 107, 0, 0.2);
-      
-      --text-main: #f5f6f8;
-      --text-muted: #8b92a5;
-      
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-      
-      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      --font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>ShyftHero | Dispatch Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-primary: #0a0b0d;
+        --bg-surface: #111317;
+        --bg-elevated: #181b22;
+        --bg-overlay: rgba(10, 11, 13, 0.85);
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-main);
-      font-family: var(--font-family);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+        --accent: #ff6b00;
+        --accent-deep: #cc4e00;
+        --accent-glow: rgba(255, 107, 0, 0.2);
 
-    /* =========================================
+        --text-main: #f5f6f8;
+        --text-muted: #8b92a5;
+
+        --border-subtle: rgba(255, 255, 255, 0.08);
+
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+
+        --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        --font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-main);
+        font-family: var(--font-family);
+        height: 100vh;
+        margin-left:40px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* =========================================
        1. GATEWAY SCREEN (RoadWatcHero Style)
        ========================================= */
-    #gateway {
-      position: fixed;
-      inset: 0;
-      background: #f8f9fa;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.4s ease, visibility 0.4s;
-    }
-    .gateway-brand {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .gateway-logo-svg {
-      width: 120px;
-      height: auto;
-      margin-bottom: 16px;
-    }
-    .gateway-title {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #111;
-      letter-spacing: -0.03em;
-    }
-    .text-accent { color: var(--accent); }
-    .gateway-slogan {
-      font-size: 1rem;
-      color: #555;
-      font-weight: 500;
-      margin-top: 8px;
-    }
-    .gateway-btn {
-      width: 80%;
-      max-width: 320px;
-      padding: 16px;
-      border-radius: 12px;
-      border: none;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
-    .gateway-btn:active { transform: scale(0.97); }
-    .btn-find { background: var(--accent); color: #fff; }
-    .btn-become { background: #1a2233; color: #fff; }
+      #gateway {
+        position: fixed;
+        inset: 0;
+        background: #f8f9fa;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s ease, visibility 0.4s;
+      }
+      .gateway-brand {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .gateway-logo-svg {
+        width: 120px;
+        height: auto;
+        margin-bottom: 16px;
+      }
+      .gateway-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #111;
+        letter-spacing: -0.03em;
+      }
+      .text-accent {
+        color: var(--accent);
+      }
+      .gateway-slogan {
+        font-size: 1rem;
+        color: #555;
+        font-weight: 500;
+        margin-top: 8px;
+      }
+      .gateway-btn {
+        width: 80%;
+        max-width: 320px;
+        padding: 16px;
+        border-radius: 12px;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+      .gateway-btn:active {
+        transform: scale(0.97);
+      }
+      .btn-find {
+        background: var(--accent);
+        color: #fff;
+      }
+      .btn-become {
+        background: #1a2233;
+        color: #fff;
+      }
 
-    /* =========================================
+      /* =========================================
        2. MAIN DASHBOARD UI
        ========================================= */
-    header {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: 1.25rem;
-      font-weight: 800;
-      position: relative;
-      z-index: 10;
-    }
+      header {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-subtle);
+        font-size: 1.25rem;
+        font-weight: 800;
+        position: relative;
+        z-index: 10;
+      }
 
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      padding-bottom: 90px; /* Space for footer */
-    }
+      main {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        padding-bottom: 90px; /* Space for footer */
+      }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .metric-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-    }
-    .metric-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-    .metric-value { font-size: 1.8rem; font-weight: 800; margin-top: 8px; color: #fff; }
-    .metric-value span { font-size: 1rem; color: var(--accent); }
+      .metric-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .metric-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 16px;
+      }
+      .metric-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .metric-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-top: 8px;
+        color: #fff;
+      }
+      .metric-value span {
+        font-size: 1rem;
+        color: var(--accent);
+      }
 
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    /* Job Card & Radar Pulse */
-    .job-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 12px;
-      position: relative;
-    }
-    .job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-    .job-role { font-weight: 700; font-size: 1rem; color: #fff; }
-    .job-rate { font-weight: 800; color: var(--accent); }
-    .job-details { font-size: 0.85rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; }
-    
-    .radar-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 107, 0, 0.05);
-      border: 1px solid var(--border-accent);
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      margin-top: 16px;
-      position: relative;
-      overflow: hidden;
-    }
-    .radar-icon-box {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      z-index: 2;
-    }
-    .radar-icon-box svg { fill: #fff; width: 24px; height: 24px; }
-    .pulse-ring {
-      position: absolute;
-      left: 12px; top: 12px;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: radarPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-      z-index: 1;
-    }
-    @keyframes radarPulse {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(3); opacity: 0; }
-    }
-    .radar-text { z-index: 2; font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+      /* Job Card & Radar Pulse */
+      .job-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        margin-bottom: 12px;
+        position: relative;
+      }
+      .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      .job-role {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #fff;
+      }
+      .job-rate {
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .job-details {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
 
-    .applicant-badge {
-      margin-top: 12px;
-      background: var(--bg-elevated);
-      padding: 10px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .applicant-badge span { font-size: 0.85rem; font-weight: 600; }
-    .btn-edit-job {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
+      .radar-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 107, 0, 0.05);
+        border: 1px solid var(--border-accent);
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        margin-top: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .radar-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+      }
+      .radar-icon-box svg {
+        fill: #fff;
+        width: 24px;
+        height: 24px;
+      }
+      .pulse-ring {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent);
+        animation: radarPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        z-index: 1;
+      }
+      @keyframes radarPulse {
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+      .radar-text {
+        z-index: 2;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
 
-    /* =========================================
+      .applicant-badge {
+        margin-top: 12px;
+        background: var(--bg-elevated);
+        padding: 10px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+      .applicant-badge span {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .btn-edit-job {
+        background: transparent;
+        border: 1px solid var(--border-subtle);
+        color: var(--text-main);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* =========================================
        3. BOTTOM NAVIGATION (Humped out)
        ========================================= */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: 70px;
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 40;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-    .nav-btn {
-      background: none; border: none;
-      color: var(--text-muted);
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      cursor: pointer; width: 60px;
-    }
-    .nav-btn svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; }
-    
-    .nav-hump {
-      position: relative;
-      top: -20px;
-      width: 64px; height: 64px;
-      background: var(--bg-primary); /* Cuts out the background */
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .nav-hump::before {
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      padding: 6px; /* Hump gap */
-      background: var(--bg-primary);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-    }
-    .nav-hump-btn {
-      width: 52px; height: 52px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 16px var(--accent-glow);
-      border: none; cursor: pointer; color: #fff;
-    }
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: var(--bg-surface);
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 40;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      .nav-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        width: 60px;
+      }
+      .nav-btn svg {
+        width: 24px;
+        height: 24px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+      }
 
-    /* =========================================
+      .nav-hump {
+        position: relative;
+        top: -20px;
+        width: 64px;
+        height: 64px;
+        background: var(--bg-primary); /* Cuts out the background */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-hump::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        padding: 6px; /* Hump gap */
+        background: var(--bg-primary);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+      .nav-hump-btn {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px var(--accent-glow);
+        border: none;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      /* =========================================
        4. FULL-HEIGHT JOBS SIDEBAR
        ========================================= */
-    #sidebar-jobs {
-      position: fixed;
-      top: 0; bottom: 0; left: -90%;
-      width: 90%;
-      background: var(--bg-surface);
-      border-right: 1px solid var(--border-subtle);
-      z-index: 50;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-      display: flex; flex-direction: column;
-    }
-    #sidebar-jobs.open { transform: translateX(100%); }
-    .sidebar-tab {
-      position: absolute;
-      right: -40px; top: 50%;
-      transform: translateY(-50%);
-      background: var(--accent);
-      color: #fff;
-      width: 40px; height: 100px;
-      border-radius: 0 12px 12px 0;
-      display: flex; align-items: center; justify-content: center;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-weight: 800; font-size: 0.9rem; letter-spacing: 2px;
-      cursor: pointer; box-shadow: 4px 0 15px rgba(255, 107, 0, 0.3);
-    }
-    .sidebar-content {
-      flex: 1; overflow-y: auto; padding: 24px;
-    }
-    .sidebar-header { font-size: 1.25rem; font-weight: 800; margin-bottom: 24px; }
-    
-    /* Forms */
-    .form-group { margin-bottom: 20px; }
-    .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
-    .form-input {
-      width: 100%; padding: 14px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      color: #fff; font-family: var(--font-family); font-size: 1rem;
-      outline: none; transition: var(--transition);
-    }
-    .form-input:focus { border-color: var(--accent); }
-    .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .pill-tag {
-      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
-      padding: 10px; border-radius: var(--radius-sm);
-      text-align: center; font-size: 0.85rem; font-weight: 600;
-      color: var(--text-muted); cursor: pointer; transition: var(--transition);
-    }
-    .pill-tag.active { background: rgba(255,107,0,0.1); border-color: var(--accent); color: var(--accent); }
-    
-    .btn-primary {
-      width: 100%; padding: 16px;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: var(--radius-sm);
-      font-size: 1rem; font-weight: 800; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: var(--transition);
-    }
-    .btn-primary:disabled { background: var(--bg-elevated); color: var(--text-muted); cursor: not-allowed; }
-    .btn-primary.loading { color: transparent; position: relative; }
-    .btn-primary.loading::after {
-      content: ''; position: absolute;
-      width: 20px; height: 20px;
-      border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff;
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+      #sidebar-jobs {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -90%;
+        width: 90%;
+        background: var(--bg-surface);
+        border-right: 1px solid var(--border-subtle);
+        z-index: 50;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+      }
+      #sidebar-jobs.open {
+        transform: translateX(100%);
+      }
+      .sidebar-tab {
+        position: absolute;
+        right: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--accent);
+        color: #fff;
 
-    /* =========================================
+        width: 40px;
+        height: 100vh;
+        border-radius: 0 12px 12px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        cursor: pointer;
+        box-shadow: 4px 0 15px rgba(255, 107, 0, 0.3);
+      }
+      .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+      }
+      .sidebar-header { 
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 24px;
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+      .form-input {
+        width: 100%;
+        padding: 14px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        color: #fff;
+        font-family: var(--font-family);
+        font-size: 1rem;
+        outline: none;
+        transition: var(--transition);
+      }
+      .form-input:focus {
+        border-color: var(--accent);
+      }
+      .pill-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .pill-tag {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        padding: 10px;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .pill-tag.active {
+        background: rgba(255, 107, 0, 0.1);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .btn-primary {
+        width: 100%;
+        padding: 16px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: var(--transition);
+      }
+      .btn-primary:disabled {
+        background: var(--bg-elevated);
+        color: var(--text-muted);
+        cursor: not-allowed;
+      }
+      .btn-primary.loading {
+        color: transparent;
+        position: relative;
+      }
+      .btn-primary.loading::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* =========================================
        5. MODALS & FROSTED OVERLAY
        ========================================= */
-    #overlay {
-      position: fixed; inset: 0;
-      background: var(--bg-overlay);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      z-index: 100;
-      opacity: 0; visibility: hidden; transition: var(--transition);
-    }
-    #overlay.active { opacity: 1; visibility: visible; }
-    
-    .modal {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 101;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      pointer-events: none; /* Let clicks pass to overlay */
-    }
-    .modal-content {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      width: 100%; max-width: 400px; max-height: 90vh;
-      overflow-y: auto;
-      pointer-events: auto;
-      position: relative;
-      /* Kinetic Diagonal Slide */
-      transform: translate(-30%, 30%);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal.active .modal-content {
-      transform: translate(0, 0);
-      opacity: 1; visibility: visible;
-    }
+      #overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--bg-overlay);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+      #overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
 
-    .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .modal-title { font-size: 1.1rem; font-weight: 800; }
-    .modal-close {
-      background: none; border: none; color: var(--accent);
-      cursor: pointer; padding: 4px; display: flex;
-    }
-    .modal-body { padding: 24px; }
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 101;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        pointer-events: none; /* Let clicks pass to overlay */
+      }
+      .modal-content {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        width: 100%;
+        max-width: 400px;
+        max-height: 90vh;
+        overflow-y: auto;
+        pointer-events: auto;
+        position: relative;
+        /* Kinetic Diagonal Slide */
+        transform: translate(-30%, 30%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .modal.active .modal-content {
+        transform: translate(0, 0);
+        opacity: 1;
+        visibility: visible;
+      }
 
-    /* Specific Modal Tweaks */
-    #modal-search .modal-content { max-width: 100%; height: 95vh; align-self: flex-end; border-radius: 20px 20px 0 0; }
-    .search-header-row { display: flex; gap: 12px; margin-bottom: 20px; }
-    .search-input { flex: 1; }
-    .btn-filter { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); width: 48px; display: flex; align-items: center; justify-content: center; color: var(--text-main); }
-    
-    .worker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .worker-grid.list-view { grid-template-columns: 1fr; }
-    
-    .hero-card {
-      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm); padding: 16px; cursor: pointer;
-    }
-    .hero-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-subtle); border: 2px solid var(--accent); margin-bottom: 12px; }
-    .hero-name { font-weight: 800; font-size: 0.95rem; }
-    .hero-meta { font-size: 0.75rem; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
-    .hero-bio { font-size: 0.8rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+      .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border-subtle);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        color: var(--accent);
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+      }
+      .modal-body {
+        padding: 24px;
+      }
 
-    /* Auth Expandable */
-    #signup-fields { display: none; margin-top: 20px; }
-    #signup-fields.expanded { display: block; }
-    .auth-toggle { text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
-    .auth-toggle span { color: var(--accent); font-weight: 700; }
+      /* Specific Modal Tweaks */
+      #modal-search .modal-content {
+        max-width: 100%;
+        height: 95vh;
+        align-self: flex-end;
+        border-radius: 20px 20px 0 0;
+      }
+      .search-header-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .search-input {
+        flex: 1;
+      }
+      .btn-filter {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-main);
+      }
 
-    /* =========================================
+      .worker-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .worker-grid.list-view {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        padding: 16px;
+        cursor: pointer;
+      }
+      .hero-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--bg-subtle);
+        border: 2px solid var(--accent);
+        margin-bottom: 12px;
+      }
+      .hero-name {
+        font-weight: 800;
+        font-size: 0.95rem;
+      }
+      .hero-meta {
+        font-size: 0.75rem;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .hero-bio {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Auth Expandable */
+      #signup-fields {
+        display: none;
+        margin-top: 20px;
+      }
+      #signup-fields.expanded {
+        display: block;
+      }
+      .auth-toggle {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+      .auth-toggle span {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      /* =========================================
        6. CUSTOM GLOBAL ALERT
        ========================================= */
-    #custom-alert {
-      position: fixed; top: 20px; left: 50%; transform: translate(-50%, -100%);
-      background: var(--bg-elevated); border: 1px solid var(--accent);
-      padding: 16px 24px; border-radius: var(--radius-sm);
-      color: #fff; font-weight: 700; font-size: 0.95rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      z-index: 999; opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex; align-items: center; gap: 12px;
-    }
-    #custom-alert.show { transform: translate(-50%, 0); opacity: 1; }
-  </style>
-</head>
-<body>
-
-  <!-- 1. GATEWAY SCREEN -->
-  <div id="gateway">
-    <div class="gateway-brand">
-      <!-- Mock Logo (Car + Plus Bubble) -->
-      <svg class="gateway-logo-svg" viewBox="0 0 100 100" fill="none">
-        <path d="M10 60 Q 20 40 40 40 L 70 40 Q 90 45 90 60 L 90 70 L 10 70 Z" fill="#1a2233"/>
-        <circle cx="25" cy="70" r="12" fill="#1a2233"/>
-        <circle cx="25" cy="70" r="6" fill="#fff"/>
-        <circle cx="75" cy="70" r="12" fill="#1a2233"/>
-        <circle cx="75" cy="70" r="6" fill="#fff"/>
-        <!-- Plus Bubble -->
-        <circle cx="70" cy="30" r="18" fill="#ff6b00"/>
-        <path d="M64 30 H 76 M70 24 V 36" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-        <!-- Signal Waves -->
-        <path d="M15 35 Q 20 25 30 25 M10 25 Q 20 10 35 15" stroke="#007bff" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-      <div class="gateway-title">Shyft<span class="text-accent">Hero</span></div>
-      <div class="gateway-slogan">Help is just a click away.</div>
-    </div>
-    <button class="gateway-btn btn-find" onclick="enterEmployer()">Find a Hero!</button>
-    <button class="gateway-btn btn-become" onclick="window.location.href='worker.html'">Become a Hero!</button>
-  </div>
-
-  <!-- 2. MAIN APP DASHBOARD -->
-  <header>Shyft<span class="text-accent">Hero</span></header>
-  
-  <main>
-    <div class="metric-grid">
-      <div class="metric-card">
-        <div class="metric-label">Your Hero Pool</div>
-        <div class="metric-value">42 <span>(18 Online)</span></div>
+      #custom-alert {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        background: var(--bg-elevated);
+        border: 1px solid var(--accent);
+        padding: 16px 24px;
+        border-radius: var(--radius-sm);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        z-index: 999;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      #custom-alert.show {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. GATEWAY SCREEN -->
+    <div id="gateway">
+      <div class="gateway-brand">
+        <!-- Mock Logo (Car + Plus Bubble) -->
+        <svg class="gateway-logo-svg" viewBox="0 0 100 100" fill="none">
+          <path
+            d="M10 60 Q 20 40 40 40 L 70 40 Q 90 45 90 60 L 90 70 L 10 70 Z"
+            fill="#1a2233"
+          />
+          <circle cx="25" cy="70" r="12" fill="#1a2233" />
+          <circle cx="25" cy="70" r="6" fill="#fff" />
+          <circle cx="75" cy="70" r="12" fill="#1a2233" />
+          <circle cx="75" cy="70" r="6" fill="#fff" />
+          <!-- Plus Bubble -->
+          <circle cx="70" cy="30" r="18" fill="#ff6b00" />
+          <path
+            d="M64 30 H 76 M70 24 V 36"
+            stroke="#fff"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <!-- Signal Waves -->
+          <path
+            d="M15 35 Q 20 25 30 25 M10 25 Q 20 10 35 15"
+            stroke="#007bff"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+        </svg>
+        <div class="gateway-title">
+          Shyft<span class="text-accent">Hero</span>
+        </div>
+        <div class="gateway-slogan">Help is just a click away.</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-label">Active Broadcasts</div>
-        <div class="metric-value" id="active-broadcast-count">1</div>
-      </div>
-    </div>
-
-    <div class="section-title">
-      <span>Live Dispatch Status</span>
-    </div>
-
-    <!-- Active Job with Radar -->
-    <div id="live-jobs-container">
-      <div class="job-card" id="demo-active-job">
-        <div class="job-header">
-          <div class="job-role">CDL-A Local Route</div>
-          <div class="job-rate">$35/hr</div>
-        </div>
-        <div class="job-details">
-          <span>Today • 02:00 PM - 10:00 PM</span>
-        </div>
-        <div class="radar-container">
-          <div class="pulse-ring"></div>
-          <div class="radar-icon-box">
-            <!-- Satellite Dish SVG Mock -->
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-3.73c-1.39-.35-2.52-1.48-2.87-2.87H4.4c.39 3.65 3.25 6.51 6.9 6.9v-4.03c-.48-.22-.9-.57-1.2-1.01l-1.07 1.07c-.44-.44-.81-.96-1.09-1.54l1.09-1.09c-.27-.44-.47-.93-.57-1.45H4.21c.14-.99.5-1.93 1.03-2.77l1.39 1.39c.28-.43.64-.81 1.05-1.11l-1.37-1.37c.72-.6 1.57-1.04 2.51-1.26v2.13c.47-.11.96-.11 1.43 0V4.4c1.1.2 2.13.62 3.03 1.21l-1.43 1.43c.47.33.88.75 1.21 1.21l1.43-1.43c.6.9 1.02 1.94 1.21 3.04h-2.13c-.11-.47-.11-.96 0-1.43h2.13c-.22-.94-.66-1.79-1.26-2.51l-1.37 1.37c-.3-.41-.68-.77-1.11-1.05l1.39-1.39c-.84-.53-1.78-.89-2.77-1.03v3.38c-.52.1-1.01.3-1.45.57l-1.09-1.09c-.58.28-1.1.65-1.54 1.09l1.07 1.07c-.44.3-.79.72-1.01 1.2h-4.03c.39 3.65 3.25 6.51 6.9 6.9z"/></svg>
-          </div>
-          <div class="radar-text">Broadcasting to Pool...</div>
-        </div>
-        
-        <div class="applicant-badge" onclick="secureAction(() => openModal('modal-applicants'))">
-          <span style="color:var(--accent);">2 Heroes Applied</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- 3. BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
-    <button class="nav-btn" onclick="secureAction(() => showCustomAlert('Messages coming soon', 'info'))">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-      <span style="font-size:0.65rem; font-weight:700;">Chat</span>
-    </button>
-    <div class="nav-hump">
-      <button class="nav-hump-btn" onclick="openModal('modal-search')">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <button class="gateway-btn btn-find" onclick="enterEmployer()">
+        Find a Hero!
+      </button>
+      <button
+        class="gateway-btn btn-become"
+        onclick="window.location.href='worker.html'"
+      >
+        Become a Hero!
       </button>
     </div>
-    <button class="nav-btn" onclick="openModal('modal-settings')">
-      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      <span style="font-size:0.65rem; font-weight:700;">Menu</span>
-    </button>
-  </nav>
 
-  <!-- 4. JOBS SIDEBAR -->
-  <div id="sidebar-jobs">
-    <div class="sidebar-tab" onclick="toggleSidebar()">JOBS</div>
-    <div class="sidebar-content">
-      <div class="sidebar-header">Create Broadcast</div>
-      
-      <form id="form-job">
-        <div class="form-group">
-          <label class="form-label">Requirement Tag</label>
-          <div class="pill-grid">
-            <div class="pill-tag active" onclick="togglePill(this)">CDL-A</div>
-            <div class="pill-tag" onclick="togglePill(this)">Warehouse</div>
-            <div class="pill-tag" onclick="togglePill(this)">Heavy Lift</div>
-            <div class="pill-tag" onclick="togglePill(this)">Forklift</div>
+    <!-- 2. MAIN APP DASHBOARD -->
+    <header>Shyft<span class="text-accent">Hero</span></header>
+
+    <main>
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-label">Your Hero Pool</div>
+          <div class="metric-value">42 <span>(18 Online)</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Active Broadcasts</div>
+          <div class="metric-value" id="active-broadcast-count">1</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>Live Dispatch Status</span>
+      </div>
+
+      <!-- Active Job with Radar -->
+      <div id="live-jobs-container">
+        <div class="job-card" id="demo-active-job">
+          <div class="job-header">
+            <div class="job-role">CDL-A Local Route</div>
+            <div class="job-rate">$35/hr</div>
+          </div>
+          <div class="job-details">
+            <span>Today • 02:00 PM - 10:00 PM</span>
+          </div>
+          <div class="radar-container">
+            <div class="pulse-ring"></div>
+            <div class="radar-icon-box">
+              <!-- Satellite Dish SVG Mock -->
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-3.73c-1.39-.35-2.52-1.48-2.87-2.87H4.4c.39 3.65 3.25 6.51 6.9 6.9v-4.03c-.48-.22-.9-.57-1.2-1.01l-1.07 1.07c-.44-.44-.81-.96-1.09-1.54l1.09-1.09c-.27-.44-.47-.93-.57-1.45H4.21c.14-.99.5-1.93 1.03-2.77l1.39 1.39c.28-.43.64-.81 1.05-1.11l-1.37-1.37c.72-.6 1.57-1.04 2.51-1.26v2.13c.47-.11.96-.11 1.43 0V4.4c1.1.2 2.13.62 3.03 1.21l-1.43 1.43c.47.33.88.75 1.21 1.21l1.43-1.43c.6.9 1.02 1.94 1.21 3.04h-2.13c-.11-.47-.11-.96 0-1.43h2.13c-.22-.94-.66-1.79-1.26-2.51l-1.37 1.37c-.3-.41-.68-.77-1.11-1.05l1.39-1.39c-.84-.53-1.78-.89-2.77-1.03v3.38c-.52.1-1.01.3-1.45.57l-1.09-1.09c-.58.28-1.1.65-1.54 1.09l1.07 1.07c-.44.3-.79.72-1.01 1.2h-4.03c.39 3.65 3.25 6.51 6.9 6.9z"
+                />
+              </svg>
+            </div>
+            <div class="radar-text">Broadcasting to Pool...</div>
+          </div>
+
+          <div
+            class="applicant-badge"
+            onclick="secureAction(() => openModal('modal-applicants'))"
+          >
+            <span style="color: var(--accent)">2 Heroes Applied</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </div>
         </div>
+      </div>
+    </main>
 
-        <div class="form-group">
-          <label class="form-label">Shift Start Time</label>
-          <input type="time" class="form-input" id="job-start" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Hourly Rate ($)</label>
-          <input type="number" class="form-input" id="job-rate" placeholder="e.g. 25" required>
-        </div>
-
-        <button type="button" class="btn-primary" id="btn-broadcast" disabled onclick="secureAction(submitJob)">
-          Broadcast to Pool
+    <!-- 3. BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <button
+        class="nav-btn"
+        onclick="secureAction(() => showCustomAlert('Messages coming soon', 'info'))"
+      >
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+        <span style="font-size: 0.65rem; font-weight: 700">Chat</span>
+      </button>
+      <div class="nav-hump">
+        <button class="nav-hump-btn" onclick="openModal('modal-search')">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
         </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- 5. OVERLAY & MODALS -->
-  <div id="overlay" onclick="closeAllModals()"></div>
-
-  <!-- Auth Modal -->
-  <div id="modal-auth" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">Sign In Required</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
-      <div class="modal-body">
-        <form id="form-auth">
+      <button class="nav-btn" onclick="openModal('modal-settings')">
+        <svg viewBox="0 0 24 24">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span style="font-size: 0.65rem; font-weight: 700">Menu</span>
+      </button>
+    </nav>
+
+    <!-- 4. JOBS SIDEBAR -->
+    <div id="sidebar-jobs">
+      <div class="sidebar-tab" onclick="toggleSidebar()">JOBS</div>
+      <div class="sidebar-content">
+        <div class="sidebar-header">Create Broadcast</div>
+
+        <form id="form-job">
           <div class="form-group">
-            <input type="email" class="form-input" placeholder="Email Address" required>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-input" placeholder="Password" required>
-          </div>
-          
-          <div id="signup-fields">
-            <div class="form-group"><input type="text" class="form-input" placeholder="Your Name"></div>
-            <div class="form-group"><input type="text" class="form-input" placeholder="Business Name"></div>
-            <div class="form-group"><input type="tel" class="form-input" placeholder="Phone Number"></div>
+            <label class="form-label">Requirement Tag</label>
+            <div class="pill-grid">
+              <div class="pill-tag active" onclick="togglePill(this)">
+                CDL-A
+              </div>
+              <div class="pill-tag" onclick="togglePill(this)">Warehouse</div>
+              <div class="pill-tag" onclick="togglePill(this)">Heavy Lift</div>
+              <div class="pill-tag" onclick="togglePill(this)">Forklift</div>
+            </div>
           </div>
 
-          <button type="button" class="btn-primary" id="btn-auth-submit" onclick="simulateAuth()">Sign In</button>
-          
-          <div class="auth-toggle" onclick="toggleAuthMode()">
-            Need an account? <span>Sign up</span>
+          <div class="form-group">
+            <label class="form-label">Shift Start Time</label>
+            <input type="time" class="form-input" id="job-start" required />
           </div>
+
+          <div class="form-group">
+            <label class="form-label">Hourly Rate ($)</label>
+            <input
+              type="number"
+              class="form-input"
+              id="job-rate"
+              placeholder="e.g. 25"
+              required
+            />
+          </div>
+
+          <button
+            type="button"
+            class="btn-primary"
+            id="btn-broadcast"
+            disabled
+            onclick="secureAction(submitJob)"
+          >
+            Broadcast to Pool
+          </button>
         </form>
       </div>
     </div>
-  </div>
 
-  <!-- Settings Modal (Smart Save) -->
-  <div id="modal-settings" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">Business Settings</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div class="modal-body">
-        <form id="form-settings">
-          <div class="form-group">
-            <label class="form-label">Business Name</label>
-            <input type="text" class="form-input track-change" id="set-name" value="Anderson Logistics">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Dispatch Address</label>
-            <input type="text" class="form-input track-change" id="set-address" value="123 Main St, Council Bluffs">
-          </div>
-          
-          <button type="button" class="btn-primary" id="btn-save-settings" disabled onclick="secureAction(saveSettings)">Save Changes</button>
-        </form>
+    <!-- 5. OVERLAY & MODALS -->
+    <div id="overlay" onclick="closeAllModals()"></div>
 
-        <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
-          <button type="button" class="btn-primary" style="background:var(--bg-elevated); border:1px solid var(--accent); color:var(--accent);" onclick="openModal('modal-stripe')">Manage Subscription</button>
-        </div>
-        <div style="margin-top: 12px;">
-          <button type="button" class="btn-primary" style="background:transparent; color:#ff334b;" onclick="secureAction(confirmSignOut)">Sign Out</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stripe Subscription Mock Modal -->
-  <div id="modal-stripe" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">ShyftHero Business Plan</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div class="modal-body">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <div style="font-size: 2rem; font-weight: 800; color: #fff;">$99<span style="font-size:1rem; color:var(--text-muted);">/mo</span></div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">Unlimited Shift Broadcasts</div>
-        </div>
-        <div class="form-group"><input type="text" class="form-input" placeholder="Card Number (Mock)" disabled></div>
-        <button type="button" class="btn-primary" id="btn-stripe" onclick="secureAction(simulateStripe)">Start 14-Day Free Trial</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hero Directory Modal -->
-  <div id="modal-search" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title text-accent">Hero Directory</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div class="modal-body">
-        <div class="search-header-row">
-          <input type="text" class="form-input search-input" placeholder="Search skills, names...">
-          <button class="btn-filter" onclick="showCustomAlert('Filter options dropped down', 'info')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+    <!-- Auth Modal -->
+    <div id="modal-auth" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Sign In Required</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
+        <div class="modal-body">
+          <form id="form-auth">
+            <div class="form-group">
+              <input
+                type="email"
+                class="form-input"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Password"
+                required
+              />
+            </div>
 
-        <div class="worker-grid" id="hero-grid">
-          <!-- Dummy Worker -->
-          <div class="hero-card" onclick="openModal('modal-worker-profile')">
-            <div class="hero-avatar"></div>
-            <div class="hero-name">Marcus Smith</div>
-            <div class="hero-meta">Age 28 • ★ 4.98</div>
-            <div class="hero-bio">Experienced route sprinter and heavy equipment operator...</div>
+            <div id="signup-fields">
+              <div class="form-group">
+                <input type="text" class="form-input" placeholder="Your Name" />
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Business Name"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="tel"
+                  class="form-input"
+                  placeholder="Phone Number"
+                />
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn-primary"
+              id="btn-auth-submit"
+              onclick="simulateAuth()"
+            >
+              Sign In
+            </button>
+
+            <div class="auth-toggle" onclick="toggleAuthMode()">
+              Need an account? <span>Sign up</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal (Smart Save) -->
+    <div id="modal-settings" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Business Settings</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-settings">
+            <div class="form-group">
+              <label class="form-label">Business Name</label>
+              <input
+                type="text"
+                class="form-input track-change"
+                id="set-name"
+                value="Anderson Logistics"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dispatch Address</label>
+              <input
+                type="text"
+                class="form-input track-change"
+                id="set-address"
+                value="123 Main St, Council Bluffs"
+              />
+            </div>
+
+            <button
+              type="button"
+              class="btn-primary"
+              id="btn-save-settings"
+              disabled
+              onclick="secureAction(saveSettings)"
+            >
+              Save Changes
+            </button>
+          </form>
+
+          <div
+            style="
+              margin-top: 24px;
+              padding-top: 24px;
+              border-top: 1px solid var(--border-subtle);
+            "
+          >
+            <button
+              type="button"
+              class="btn-primary"
+              style="
+                background: var(--bg-elevated);
+                border: 1px solid var(--accent);
+                color: var(--accent);
+              "
+              onclick="openModal('modal-stripe')"
+            >
+              Manage Subscription
+            </button>
           </div>
-          <!-- More dummies can go here -->
+          <div style="margin-top: 12px">
+            <button
+              type="button"
+              class="btn-primary"
+              style="background: transparent; color: #ff334b"
+              onclick="secureAction(confirmSignOut)"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Applicant Queue Modal -->
-  <div id="modal-applicants" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">Shift Applicants</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div class="modal-body">
-        <div class="hero-card" style="margin-bottom: 12px;" onclick="openModal('modal-worker-profile')">
-          <div class="hero-name">Marcus Smith</div>
-          <div class="hero-meta">★ 4.98 • 3 miles away</div>
-          <button class="btn-primary" style="padding: 10px; margin-top: 8px; font-size: 0.85rem;" onclick="event.stopPropagation(); assignShift(this)">Approve & Assign</button>
+    <!-- Stripe Subscription Mock Modal -->
+    <div id="modal-stripe" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">ShyftHero Business Plan</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="text-align: center; margin-bottom: 24px">
+            <div style="font-size: 2rem; font-weight: 800; color: #fff">
+              $99<span style="font-size: 1rem; color: var(--text-muted)"
+                >/mo</span
+              >
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted)">
+              Unlimited Shift Broadcasts
+            </div>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Card Number (Mock)"
+              disabled
+            />
+          </div>
+          <button
+            type="button"
+            class="btn-primary"
+            id="btn-stripe"
+            onclick="secureAction(simulateStripe)"
+          >
+            Start 14-Day Free Trial
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Worker Full Profile Modal -->
-  <div id="modal-worker-profile" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title text-accent">Hero Profile</div>
-        <button class="modal-close" onclick="closeAllModals()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div class="modal-body" style="text-align: center;">
-        <div class="hero-avatar" style="width: 80px; height: 80px; margin: 0 auto 16px;"></div>
-        <div style="font-size: 1.5rem; font-weight: 800;">Marcus Smith</div>
-        <div style="color: var(--accent); font-weight: 700; margin-bottom: 16px;">★ 4.98 (42 Shifts)</div>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; text-align: left;">
-          Experienced route sprinter and heavy equipment operator with a clean record. Available for immediate dispatch. Certified forklift and CDL-A.
-        </p>
-        <div style="display: flex; gap: 12px;">
-          <button class="btn-primary" style="flex: 1; background: var(--bg-elevated); border: 1px solid var(--border-subtle); color: #fff;" onclick="secureAction(() => showCustomAlert('Messaging opened', 'info'))">Message</button>
-          <button class="btn-primary" style="flex: 1;" onclick="secureAction(() => showCustomAlert('Invite sent!', 'success'))">Invite to Job</button>
+    <!-- Hero Directory Modal -->
+    <div id="modal-search" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title text-accent">Hero Directory</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="search-header-row">
+            <input
+              type="text"
+              class="form-input search-input"
+              placeholder="Search skills, names..."
+            />
+            <button
+              class="btn-filter"
+              onclick="showCustomAlert('Filter options dropped down', 'info')"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polygon
+                  points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+                ></polygon>
+              </svg>
+            </button>
+          </div>
+
+          <div class="worker-grid" id="hero-grid">
+            <!-- Dummy Worker -->
+            <div class="hero-card" onclick="openModal('modal-worker-profile')">
+              <div class="hero-avatar"></div>
+              <div class="hero-name">Marcus Smith</div>
+              <div class="hero-meta">Age 28 • ★ 4.98</div>
+              <div class="hero-bio">
+                Experienced route sprinter and heavy equipment operator...
+              </div>
+            </div>
+            <!-- More dummies can go here -->
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 6. GLOBAL CUSTOM ALERT -->
-  <div id="custom-alert">
-    <svg id="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    <span id="alert-text">Success message</span>
-  </div>
+    <!-- Applicant Queue Modal -->
+    <div id="modal-applicants" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Shift Applicants</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div
+            class="hero-card"
+            style="margin-bottom: 12px"
+            onclick="openModal('modal-worker-profile')"
+          >
+            <div class="hero-name">Marcus Smith</div>
+            <div class="hero-meta">★ 4.98 • 3 miles away</div>
+            <button
+              class="btn-primary"
+              style="padding: 10px; margin-top: 8px; font-size: 0.85rem"
+              onclick="event.stopPropagation(); assignShift(this)"
+            >
+              Approve & Assign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    /* Global State */
-    let isAuthenticated = false;
-    let isSignupMode = false;
-    let sidebarOpen = false;
-    let actionPendingAuth = null; // Stores action if guest hits auth wall
+    <!-- Worker Full Profile Modal -->
+    <div id="modal-worker-profile" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title text-accent">Hero Profile</div>
+          <button class="modal-close" onclick="closeAllModals()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <div
+            class="hero-avatar"
+            style="width: 80px; height: 80px; margin: 0 auto 16px"
+          ></div>
+          <div style="font-size: 1.5rem; font-weight: 800">Marcus Smith</div>
+          <div
+            style="color: var(--accent); font-weight: 700; margin-bottom: 16px"
+          >
+            ★ 4.98 (42 Shifts)
+          </div>
+          <p
+            style="
+              font-size: 0.9rem;
+              color: var(--text-muted);
+              margin-bottom: 24px;
+              text-align: left;
+            "
+          >
+            Experienced route sprinter and heavy equipment operator with a clean
+            record. Available for immediate dispatch. Certified forklift and
+            CDL-A.
+          </p>
+          <div style="display: flex; gap: 12px">
+            <button
+              class="btn-primary"
+              style="
+                flex: 1;
+                background: var(--bg-elevated);
+                border: 1px solid var(--border-subtle);
+                color: #fff;
+              "
+              onclick="secureAction(() => showCustomAlert('Messaging opened', 'info'))"
+            >
+              Message
+            </button>
+            <button
+              class="btn-primary"
+              style="flex: 1"
+              onclick="secureAction(() => showCustomAlert('Invite sent!', 'success'))"
+            >
+              Invite to Job
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    /* Gateway */
-    function enterEmployer() {
-      document.getElementById('gateway').style.opacity = '0';
-      setTimeout(() => { document.getElementById('gateway').style.display = 'none'; }, 400);
-    }
+    <!-- 6. GLOBAL CUSTOM ALERT -->
+    <div id="custom-alert">
+      <svg
+        id="alert-icon"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="alert-text">Success message</span>
+    </div>
 
-    /* Modal System */
-    function openModal(id) {
-      closeAllModals(true);
-      document.getElementById('overlay').classList.add('active');
-      document.getElementById(id).classList.add('active');
-    }
-    
-    function closeAllModals(keepOverlay = false) {
-      if (!keepOverlay) document.getElementById('overlay').classList.remove('active');
-      document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-    }
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+      /* Global State */
+      let isAuthenticated = false;
+      let isSignupMode = false;
+      let sidebarOpen = false;
+      let actionPendingAuth = null; // Stores action if guest hits auth wall
 
-    /* Custom Alert */
-    function showCustomAlert(msg, type = 'success') {
-      const alertBox = document.getElementById('custom-alert');
-      const alertIcon = document.getElementById('alert-icon');
-      document.getElementById('alert-text').textContent = msg;
-      
-      if(type === 'success') {
-        alertBox.style.borderColor = 'var(--accent)';
-        alertIcon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
-        alertIcon.style.stroke = 'var(--accent)';
-      } else if (type === 'error') {
-        alertBox.style.borderColor = '#ff334b';
-        alertIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
-        alertIcon.style.stroke = '#ff334b';
-      } else {
-        alertBox.style.borderColor = '#007bff';
-        alertIcon.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>';
-        alertIcon.style.stroke = '#007bff';
+      /* Gateway */
+      function enterEmployer() {
+        document.getElementById("gateway").style.opacity = "0";
+        setTimeout(() => {
+          document.getElementById("gateway").style.display = "none";
+        }, 400);
       }
 
-      alertBox.classList.add('show');
-      setTimeout(() => alertBox.classList.remove('show'), 3000);
-    }
-
-    /* Authentication & Gating */
-    function secureAction(callback) {
-      if (isAuthenticated) {
-        callback();
-      } else {
-        actionPendingAuth = callback;
-        openModal('modal-auth');
+      /* Modal System */
+      function openModal(id) {
+        closeAllModals(true);
+        document.getElementById("overlay").classList.add("active");
+        document.getElementById(id).classList.add("active");
       }
-    }
 
-    function toggleAuthMode() {
-      isSignupMode = !isSignupMode;
-      document.getElementById('signup-fields').classList.toggle('expanded');
-      const btn = document.getElementById('btn-auth-submit');
-      const toggle = document.querySelector('.auth-toggle');
-      if(isSignupMode) {
-        btn.textContent = 'Create Account';
-        toggle.innerHTML = 'Already have an account? <span>Sign in</span>';
-      } else {
-        btn.textContent = 'Sign In';
-        toggle.innerHTML = 'Need an account? <span>Sign up</span>';
+      function closeAllModals(keepOverlay = false) {
+        if (!keepOverlay)
+          document.getElementById("overlay").classList.remove("active");
+        document
+          .querySelectorAll(".modal")
+          .forEach((m) => m.classList.remove("active"));
       }
-    }
 
-    function simulateAuth() {
-      const btn = document.getElementById('btn-auth-submit');
-      btn.classList.add('loading');
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        isAuthenticated = true;
-        closeAllModals();
-        showCustomAlert('Authenticated Successfully', 'success');
-        if (actionPendingAuth) {
-          actionPendingAuth();
-          actionPendingAuth = null;
+      /* Custom Alert */
+      function showCustomAlert(msg, type = "success") {
+        const alertBox = document.getElementById("custom-alert");
+        const alertIcon = document.getElementById("alert-icon");
+        document.getElementById("alert-text").textContent = msg;
+
+        if (type === "success") {
+          alertBox.style.borderColor = "var(--accent)";
+          alertIcon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+          alertIcon.style.stroke = "var(--accent)";
+        } else if (type === "error") {
+          alertBox.style.borderColor = "#ff334b";
+          alertIcon.innerHTML =
+            '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+          alertIcon.style.stroke = "#ff334b";
+        } else {
+          alertBox.style.borderColor = "#007bff";
+          alertIcon.innerHTML =
+            '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>';
+          alertIcon.style.stroke = "#007bff";
         }
-      }, 1200);
-    }
 
-    function confirmSignOut() {
-      // Simulate diagonal custom confirm by re-using modal structure for speed in single file
-      isAuthenticated = false;
-      closeAllModals();
-      showCustomAlert('Signed out successfully.', 'info');
-    }
-
-    /* Smart Save Listeners */
-    const settingsInputs = document.querySelectorAll('.track-change');
-    const saveBtn = document.getElementById('btn-save-settings');
-    let initialSettings = Array.from(settingsInputs).map(i => i.value);
-
-    settingsInputs.forEach((input, index) => {
-      input.addEventListener('input', () => {
-        let isDirty = false;
-        settingsInputs.forEach((inp, idx) => {
-          if(inp.value !== initialSettings[idx]) isDirty = true;
-        });
-        saveBtn.disabled = !isDirty;
-      });
-    });
-
-    function saveSettings() {
-      saveBtn.classList.add('loading');
-      setTimeout(() => {
-        saveBtn.classList.remove('loading');
-        saveBtn.disabled = true;
-        initialSettings = Array.from(settingsInputs).map(i => i.value);
-        showCustomAlert('Business profile updated', 'success');
-        closeAllModals();
-      }, 1000);
-    }
-
-    /* Job Sidebar & Validation */
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar-jobs');
-      sidebarOpen = !sidebarOpen;
-      sidebar.classList.toggle('open', sidebarOpen);
-    }
-
-    function togglePill(el) {
-      document.querySelectorAll('.pill-tag').forEach(p => p.classList.remove('active'));
-      el.classList.add('active');
-      validateJobForm();
-    }
-
-    const jobStart = document.getElementById('job-start');
-    const jobRate = document.getElementById('job-rate');
-    const broadcastBtn = document.getElementById('btn-broadcast');
-
-    function validateJobForm() {
-      if (jobStart.value && jobRate.value) {
-        broadcastBtn.disabled = false;
-      } else {
-        broadcastBtn.disabled = true;
+        alertBox.classList.add("show");
+        setTimeout(() => alertBox.classList.remove("show"), 3000);
       }
-    }
-    jobStart.addEventListener('input', validateJobForm);
-    jobRate.addEventListener('input', validateJobForm);
 
-    function submitJob() {
-      broadcastBtn.classList.add('loading');
-      setTimeout(() => {
-        broadcastBtn.classList.remove('loading');
-        toggleSidebar();
-        showCustomAlert('Shift broadcasted to pool!', 'success');
-        
-        // Update metric
-        const count = document.getElementById('active-broadcast-count');
-        count.textContent = parseInt(count.textContent) + 1;
-        
-        // Clean form
-        jobStart.value = '';
-        jobRate.value = '';
+      /* Authentication & Gating */
+      function secureAction(callback) {
+        if (isAuthenticated) {
+          callback();
+        } else {
+          actionPendingAuth = callback;
+          openModal("modal-auth");
+        }
+      }
+
+      function toggleAuthMode() {
+        isSignupMode = !isSignupMode;
+        document.getElementById("signup-fields").classList.toggle("expanded");
+        const btn = document.getElementById("btn-auth-submit");
+        const toggle = document.querySelector(".auth-toggle");
+        if (isSignupMode) {
+          btn.textContent = "Create Account";
+          toggle.innerHTML = "Already have an account? <span>Sign in</span>";
+        } else {
+          btn.textContent = "Sign In";
+          toggle.innerHTML = "Need an account? <span>Sign up</span>";
+        }
+      }
+
+      function simulateAuth() {
+        const btn = document.getElementById("btn-auth-submit");
+        btn.classList.add("loading");
+        setTimeout(() => {
+          btn.classList.remove("loading");
+          isAuthenticated = true;
+          closeAllModals();
+          showCustomAlert("Authenticated Successfully", "success");
+          if (actionPendingAuth) {
+            actionPendingAuth();
+            actionPendingAuth = null;
+          }
+        }, 1200);
+      }
+
+      function confirmSignOut() {
+        // Simulate diagonal custom confirm by re-using modal structure for speed in single file
+        isAuthenticated = false;
+        closeAllModals();
+        showCustomAlert("Signed out successfully.", "info");
+      }
+
+      /* Smart Save Listeners */
+      const settingsInputs = document.querySelectorAll(".track-change");
+      const saveBtn = document.getElementById("btn-save-settings");
+      let initialSettings = Array.from(settingsInputs).map((i) => i.value);
+
+      settingsInputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+          let isDirty = false;
+          settingsInputs.forEach((inp, idx) => {
+            if (inp.value !== initialSettings[idx]) isDirty = true;
+          });
+          saveBtn.disabled = !isDirty;
+        });
+      });
+
+      function saveSettings() {
+        saveBtn.classList.add("loading");
+        setTimeout(() => {
+          saveBtn.classList.remove("loading");
+          saveBtn.disabled = true;
+          initialSettings = Array.from(settingsInputs).map((i) => i.value);
+          showCustomAlert("Business profile updated", "success");
+          closeAllModals();
+        }, 1000);
+      }
+
+      /* Job Sidebar & Validation */
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar-jobs");
+        sidebarOpen = !sidebarOpen;
+        sidebar.classList.toggle("open", sidebarOpen);
+      }
+
+      function togglePill(el) {
+        document
+          .querySelectorAll(".pill-tag")
+          .forEach((p) => p.classList.remove("active"));
+        el.classList.add("active");
         validateJobForm();
-      }, 1500);
-    }
+      }
 
-    /* Subscriptions Mock */
-    function simulateStripe() {
-      const btn = document.getElementById('btn-stripe');
-      btn.classList.add('loading');
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        closeAllModals();
-        showCustomAlert('Subscription Active!', 'success');
-      }, 1500);
-    }
+      const jobStart = document.getElementById("job-start");
+      const jobRate = document.getElementById("job-rate");
+      const broadcastBtn = document.getElementById("btn-broadcast");
 
-    /* Shift Assignment Logic */
-    function assignShift(btnEl) {
-      btnEl.classList.add('loading');
-      setTimeout(() => {
-        btnEl.classList.remove('loading');
-        closeAllModals();
-        showCustomAlert('Hero Assigned successfully!', 'success');
-        
-        // Remove radar pulse from main dashboard
-        const radar = document.querySelector('.radar-container');
-        if(radar) radar.innerHTML = `<div class="radar-text" style="color:#00d26a;">Filled by Marcus S.</div>`;
-        
-        const count = document.getElementById('active-broadcast-count');
-        count.textContent = Math.max(0, parseInt(count.textContent) - 1);
-      }, 1000);
-    }
-  </script>
-</body>
+      function validateJobForm() {
+        if (jobStart.value && jobRate.value) {
+          broadcastBtn.disabled = false;
+        } else {
+          broadcastBtn.disabled = true;
+        }
+      }
+      jobStart.addEventListener("input", validateJobForm);
+      jobRate.addEventListener("input", validateJobForm);
+
+      function submitJob() {
+        broadcastBtn.classList.add("loading");
+        setTimeout(() => {
+          broadcastBtn.classList.remove("loading");
+          toggleSidebar();
+          showCustomAlert("Shift broadcasted to pool!", "success");
+
+          // Update metric
+          const count = document.getElementById("active-broadcast-count");
+          count.textContent = parseInt(count.textContent) + 1;
+
+          // Clean form
+          jobStart.value = "";
+          jobRate.value = "";
+          validateJobForm();
+        }, 1500);
+      }
+
+      /* Subscriptions Mock */
+      function simulateStripe() {
+        const btn = document.getElementById("btn-stripe");
+        btn.classList.add("loading");
+        setTimeout(() => {
+          btn.classList.remove("loading");
+          closeAllModals();
+          showCustomAlert("Subscription Active!", "success");
+        }, 1500);
+      }
+
+      /* Shift Assignment Logic */
+      function assignShift(btnEl) {
+        btnEl.classList.add("loading");
+        setTimeout(() => {
+          btnEl.classList.remove("loading");
+          closeAllModals();
+          showCustomAlert("Hero Assigned successfully!", "success");
+
+          // Remove radar pulse from main dashboard
+          const radar = document.querySelector(".radar-container");
+          if (radar)
+            radar.innerHTML = `<div class="radar-text" style="color:#00d26a;">Filled by Marcus S.</div>`;
+
+          const count = document.getElementById("active-broadcast-count");
+          count.textContent = Math.max(0, parseInt(count.textContent) - 1);
+        }, 1000);
+      }
+    </script>
+  </body>
 </html>
